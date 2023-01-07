@@ -2,9 +2,46 @@
 <html>
     <head>
         <title>N-Body</title>
+        <style>
+        p {
+            margin: 0;
+        }
+        .flex {
+            display: flex;
+            gap: 5px;
+        }
+        div {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select:none;
+            user-select:none;
+            -o-user-select:none;
+        }
+        </style>
     </head>
     <body>
-        <canvas id="app"></canvas>
+        <canvas id="canvas" style="backgroundColor: black"></canvas>
+        <div style="position: fixed; left: 0; top:0; z-index:9999; color: white; padding: 15px; font-weight:1000; letter-spacing: normal; margin: 0">
+            <div class="flex">
+                Gravity :<p id="gravity"></p>
+            </div>
+            <div class="flex">
+                Num of Body :<p id="body"></p>
+            </div>
+            <div class="flex">
+                Mass:<p id="mass"></p>
+            </div>
+            <div class="flex">
+                Trail:<p id="trail"></p>
+            </div>
+        </div>
+        <div style="position: fixed; left: 85vw; top:0; z-index:9999; color: white; padding: 15px; font-weight:1000; letter-spacing: normal; margin: 0">
+            <p>Press:</p>
+            <p>r: Reset</p>
+            <p>a/d: +/- 1   Mass</p>
+            <p>A/D: +/- 100 Mass</p>
+            <p>t: trail on/off</p>
+        </div>
         <script src="./index.js"></script>
     </body>
 </html>
