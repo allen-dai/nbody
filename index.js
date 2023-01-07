@@ -48,6 +48,9 @@ document.addEventListener("keydown", e=> {
             p_m.innerHTML = mouse_mass;
             break;
         case "d":
+            if (mouse_mass > 1) {
+                mouse_mass -= 1;
+            }
             p_m.innerHTML = mouse_mass;
             break;
         case "D":
