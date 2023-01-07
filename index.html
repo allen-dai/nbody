@@ -6,9 +6,13 @@
         p {
             margin: 0;
         }
+        input {
+            color: black;
+        }
         .flex {
             display: flex;
             gap: 5px;
+            align-content: space-between;
         }
         div {
             -moz-user-select: none;
@@ -21,26 +25,33 @@
     </head>
     <body>
         <canvas id="canvas" style="backgroundColor: black"></canvas>
+        <div id="ui">
         <div style="position: fixed; left: 0; top:0; z-index:9999; color: white; padding: 15px; font-weight:1000; letter-spacing: normal; margin: 0">
             <div class="flex">
-                Gravity :<p id="gravity"></p>
+                Gravity :<input id="gravity"/>
             </div>
             <div class="flex">
-                Num of Body :<p id="body"></p>
+                Num of Body :<input id="body">
             </div>
             <div class="flex">
-                Mass:<p id="mass"></p>
+                Mass:<input id="mass"/>
             </div>
             <div class="flex">
-                Trail:<p id="trail"></p>
+                Mouse Mass:<input id="mouse_mass"/>
+            </div>
+            <div class="flex">
+                Trail:<p id="trail"/>
             </div>
         </div>
         <div style="position: fixed; left: 85vw; top:0; z-index:9999; color: white; padding: 15px; font-weight:1000; letter-spacing: normal; margin: 0">
             <p>Press:</p>
-            <p>r: Reset</p>
+            <p>r: reset</p>
             <p>a/d: +/- 1   Mass</p>
             <p>A/D: +/- 100 Mass</p>
             <p>t: trail on/off</p>
+            <p>h: unify size</p>
+            <p>H: hide UI</p>
+        </div>
         </div>
         <script src="./index.js"></script>
     </body>

@@ -3,9 +3,17 @@ var xform = svg.createSVGMatrix();
 var trail = false;
 const WIDTH = 1800;
 const HEIGHT = 930;
-const NUM_BODY = 0;
-const MASS = 1;
-const G = 20;
+var NUM_BODY = 0;
+var MASS = 1;
+var G = 20;
+var b_arr = new Array();
+var wasm;
+var mouse_x = 0;
+var mouse_y = 0;
+var mouse_mass = 1;
+var mouse_down = false;
+var hide_ui = false;
+var hide_mouse = false;
 
 const canvas = document.getElementById("canvas");
 canvas.width = WIDTH;
@@ -17,18 +25,27 @@ ctx.fillRect(0, 0, WIDTH, HEIGHT);
 const p_g = document.getElementById("gravity");
 const p_b = document.getElementById("body");
 const p_m = document.getElementById("mass");
+const p_m_m = document.getElementById("mouse_mass");
 const p_t = document.getElementById("trail");
-p_g.innerHTML = G;
-p_b.innerHTML = NUM_BODY;
-p_m.innerHTML = MASS;
-p_t.innerHTML = trail.toString();
+const ui = document.getElementById("ui");
+p_g.value = G;
+p_b.value = NUM_BODY;
+p_m.value = MASS;
+p_m_m.value = mouse_mass;
+p_t.innerHTML = trail;
 
-var b_arr = new Array();
-var wasm;
-var mouse_x = 0;
-var mouse_y = 0;
-var mouse_mass = 1;
-var mouse_down = false;
+p_g.addEventListener("input", e => {
+    G = e.target.value;
+});
+p_b.addEventListener("input", e => {
+    NUM_BODY = e.target.value;
+});
+p_m.addEventListener("input", e => {
+    MASS = e.target.value;
+});
+p_m_m.addEventListener("input", e => {
+    mouse_mass = e.target.value;
+});
 
 document.addEventListener("keydown", e=> {
     switch (e.key) {
@@ -37,32 +54,49 @@ document.addEventListener("keydown", e=> {
                 wasm.instance.exports.free_body(b);
             })
             b_arr = new Array();
-            p_b.innerHTML = 0;
+            for (let i = 0; i < NUM_BODY; i++) {
+                const b = wasm.instance.exports.new_body(Math.random() * WIDTH, Math.random() * HEIGHT, 0,0, MASS);
+                draw_circle(get_info(wasm, b));
+                b_arr.push(b);
+            }
             break;
         case "a":
             mouse_mass += 1;
-            p_m.innerHTML = mouse_mass;
+            p_m.value = mouse_mass;
             break;
         case "A":
             mouse_mass += 100;
-            p_m.innerHTML = mouse_mass;
+            p_m.value = mouse_mass;
             break;
         case "d":
             if (mouse_mass > 1) {
                 mouse_mass -= 1;
             }
-            p_m.innerHTML = mouse_mass;
+            p_m.value = mouse_mass;
             break;
         case "D":
             mouse_mass -= 100;
             if (mouse_mass <= 0){
                 mouse_mass = 1;
             }
-            p_m.innerHTML = mouse_mass;
+            p_m.value = mouse_mass;
             break;
         case "t":
             trail = !trail;
             p_t.innerHTML = trail.toString();
+            break;
+        case "h":
+            hide_mouse = !hide_mouse;
+            break;
+        case "H":
+            hide_ui = !hide_ui;
+            // ui.style.display = "none" ? hide_ui : "block";
+            if (hide_ui) {
+                ui.style.display = "none";
+            }
+            else{
+                ui.style.display = "block";
+            }
             break;
         default:
             break;
@@ -149,7 +183,7 @@ const get_info = (wasm, body) => {
 const draw_circle = (arr) => {
     ctx.fillStyle = "white";
     ctx.beginPath();
-    r = arr[7];
+    r = hide_mouse ? 1 :arr[7];
     ctx.arc(arr[0], arr[1], r, 0, 2*Math.PI);
     ctx.fill();
 }
