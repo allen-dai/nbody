@@ -1,14 +1,14 @@
 CC = gcc
 WCC = clang
-SOURCE = src/body.c\
-		 src/body.h\
+SOURCE = src/particle.c\
+		 src/particle.h\
 		 src/geo.c\
 		 src/geo.h
 
 TARGET = tangerine
-OBJS = body.o system.o geo.o
+OBJS = particle.o system.o geo.o
 
-WASM_OBJS = body.o geo.o wasm.o
+WASM_OBJS = particle.o geo.o wasm.o
 WASM_FLAGS = -Wall --target=wasm32 -D WASM -nostdlib
 WASM_EXPORTS = --export-all
 

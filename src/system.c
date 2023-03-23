@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
-#include "body.h"
+#include "particle.h"
 #include "geo.h"
 #include "math.h"
 
 typedef struct {
     int size;
     int capacity;
-    Body **body;
+    Particle **particle;
 } System;
 
 System* new_system(int capactiy)
@@ -15,31 +15,31 @@ System* new_system(int capactiy)
     System *system = (System*) malloc(sizeof(System));
     system->size = 0;
     system->capacity = capactiy;
-    system->body = (Body **) malloc(capactiy * sizeof(Body *));
+    system->particle = (Particle **) malloc(capactiy * sizeof(Particle *));
     return system;
 }
 
-void system_push(System *system, Body *body)
+void system_push(System *system, Particle *particle)
 {
     if (system->size+1 >= system->capacity) {
         system->capacity *= 2;
-        system->body = (Body **) realloc(system->body, system->capacity * sizeof(Body *));
+        system->particle = (Particle **) realloc(system->particle, system->capacity * sizeof(Particle *));
     }
 
-    system->body[system->size] = body;
+    system->particle[system->size] = particle;
     system->size += 1;
 }
 
 int system_remove_at(System *system, int index)
 {
-    if (index >= system->size || system->body[index] == NULL ) {
+    if (index >= system->size || system->particle[index] == NULL ) {
         return -1;
     };
-    free_body(system->body[index]);
+    free_particle(system->particle[index]);
     for (int i = index; i < system->size; i++) {
-        system->body[i] = system->body[i+1];
+        system->particle[i] = system->particle[i+1];
     }
-    system->body[system->size] = NULL;
+    system->particle[system->size] = NULL;
     system->size -= 1;
     return 0;
 }
@@ -47,7 +47,7 @@ int system_remove_at(System *system, int index)
 void free_system(System *system)
 {
     for (int i = 0; i < system->size; i++) {
-        free_body(system->body[i]);
+        free_particle(system->particle[i]);
     }
     free(system);
 }
@@ -55,18 +55,18 @@ void free_system(System *system)
 void system_update(System *system, float G)
 {
     for (int i = 0; i < system->size; i++) {
-        Body *b1 = system->body[i];
+        Particle *b1 = system->particle[i];
         for (int j = 0; j < system->size; j++) {
-            Body *b2 = system->body[j];
+            Particle *b2 = system->particle[j];
             if (i == j) {
                 continue;
             }
-            attract_body(b1, b2, G);
+            attract_particle(b1, b2, G);
         }
     }
 
     for (int i = 0; i < system->size; i++) {
-        update_body(system->body[i]);
+        update_particle(system->particle[i]);
     }
 
 }
@@ -74,7 +74,7 @@ void system_update(System *system, float G)
 void system_reset(System *system)
 {
     for (int i = 0; i < system->size; i++) {
-        free_body(system->body[i]);
+        free_particle(system->particle[i]);
     }
     system -> size = 0;
 }

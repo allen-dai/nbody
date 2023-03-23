@@ -1,26 +1,26 @@
 #include "walloc.c"
-#include "body.h"
+#include "particle.h"
 #include "geo.h"
 
 
-int Body_Info[8];
+int Particle_Info[8];
 
-Body* test()
+Particle* test()
 {
-    Body *body = (Body *) malloc(sizeof(Body *));
-    return body;
+    Particle *particle = (Particle *) malloc(sizeof(Particle *));
+    return particle;
 }
 
-int *get_info(Body *body)
+int *get_info(Particle *particle)
 {
-    Body_Info[0] = body->pos.x;
-    Body_Info[1] = body->pos.y;
-    Body_Info[2] = body->vel.x;
-    Body_Info[3] = body->vel.y;
-    Body_Info[4] = body->acc.x;
-    Body_Info[5] = body->acc.y;
-    Body_Info[6] = body->mass;
-    Body_Info[7] = body->radius;
+    Particle_Info[0] = particle->pos.x;
+    Particle_Info[1] = particle->pos.y;
+    Particle_Info[2] = particle->vel.x;
+    Particle_Info[3] = particle->vel.y;
+    Particle_Info[4] = particle->acc.x;
+    Particle_Info[5] = particle->acc.y;
+    Particle_Info[6] = particle->mass;
+    Particle_Info[7] = particle->radius;
 
-    return Body_Info;
+    return Particle_Info;
 }

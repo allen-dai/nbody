@@ -1,15 +1,15 @@
 #pragma once
 
-#include "body.h"
+#include "particle.h"
 
 typedef struct {
     int size;
     int capacity;
-    Body **body;
+    Particle **particle;
 } System;
 
 System* new_system(int capactiy);
-void system_push(System *system, Body *body);
+void system_push(System *system, Particle *particle);
 int system_remove_at(System *system, int index);
 void free_system(System *system);
 void system_update(System *system, float G);

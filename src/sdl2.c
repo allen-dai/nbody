@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "body.h"
+#include "particle.h"
 #include "system.h"
 #include "geo.h"
 
@@ -43,7 +43,7 @@ int main()
     }
     SDL_RenderSetLogicalSize(renderer, zoom * WIDTH, zoom * HEIGHT);
 
-    Body *mouse_circle = new_body(0, 0, 0, 0, 20);
+    Particle *mouse_circle = new_particle(0, 0, 0, 0, 20);
     bool running = true;
     int mouse_x, mouse_y;
     SDL_Event e;
@@ -51,11 +51,11 @@ int main()
     int count = 0;
     bool mousedown = false;
 
-    Vec2 new_body_vel = {0, 0};
+    Vec2 new_particle_vel = {0, 0};
     for (int z = 0; z < 1000; z++ ){
         int x = rand() % (WIDTH+800) + (WIDTH - 400);
         int y = rand() % (HEIGHT+400) + (HEIGHT - 200);
-        Body *new = new_body(x, y, 0, 0, 1);
+        Particle *new = new_particle(x, y, 0, 0, 1);
         system_push(system, new);
     }
     while (running) {
@@ -79,7 +79,7 @@ int main()
                 for (int z = 0; z < 1000; z++ ){
                     int x = rand() % (WIDTH+800) + (WIDTH - 400);
                     int y = rand() % (HEIGHT+400) + (HEIGHT - 200);
-                    Body *new = new_body(x, y, 0, 0, 1);
+                    Particle *new = new_particle(x, y, 0, 0, 1);
                     system_push(system, new);
                 }
             }
@@ -99,7 +99,7 @@ int main()
                 for (int z = 0; z < 1000; z++ ){
                     int x = rand() % (WIDTH+800) + (WIDTH - 400);
                     int y = rand() % (HEIGHT+400) + (HEIGHT - 200);
-                    Body *new = new_body(x, y, 0, 0, 1);
+                    Particle *new = new_particle(x, y, 0, 0, 1);
                     system_push(system, new);
                 }
             }
@@ -114,7 +114,7 @@ int main()
             }
         }
         else if (e.type == SDL_MOUSEBUTTONUP) {
-            Body *new = new_body(mouse_circle->pos.x, mouse_circle->pos.y, new_body_vel.x, new_body_vel.y, mass);
+            Particle *new = new_particle(mouse_circle->pos.x, mouse_circle->pos.y, new_particle_vel.x, new_particle_vel.y, mass);
             system_push(system, new);
             mousedown = false;
         }
@@ -141,17 +141,17 @@ int main()
             float x = -((float)mouse_x - (float)mouse_circle->pos.x);
             float y = -((float)mouse_y - (float)mouse_circle->pos.y);
             float h = sqrt(x * x + y * y);
-            new_body_vel.x = x;
-            new_body_vel.y = y;
+            new_particle_vel.x = x;
+            new_particle_vel.y = y;
             if (x!=0 && y!=0){
-                normalize(&new_body_vel);
-                vec2_set_mag(&new_body_vel, h);
-                vec2_limit(&new_body_vel, VELOCITY_LIMIT);
+                normalize(&new_particle_vel);
+                vec2_set_mag(&new_particle_vel, h);
+                vec2_limit(&new_particle_vel, VELOCITY_LIMIT);
             }
         }
         draw_circle(renderer, mouse_circle->pos.x, mouse_circle->pos.y, mouse_circle->radius * zoom);
         for (int i = 0; i < system->size; i++) {
-            fill_circle(renderer, system->body[i]->pos.x, system->body[i]->pos.y, system->body[i]->radius);
+            fill_circle(renderer, system->particle[i]->pos.x, system->particle[i]->pos.y, system->particle[i]->radius);
         }
         // Update screen
         SDL_RenderPresent(renderer);
@@ -165,7 +165,7 @@ int main()
 
 
     free_system(system);
-    free_body(mouse_circle);
+    free_particle(mouse_circle);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
