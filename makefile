@@ -1,9 +1,7 @@
 CC = gcc
 WCC = clang
 SOURCE = src/particle.c\
-		 src/particle.h\
 		 src/geo.c\
-		 src/geo.h
 
 TARGET = tangerine
 OBJS = particle.o system.o geo.o
